@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">NoteApp</string>
+
+    <string-array name="notesName">
+        <item>Note1</item>
+        <item>Note2</item>
+        <item>Note3</item>
+        <item>Note4</item>
+        <item>Note5</item>
+        <item>Note6</item>
+    </string-array>
 </resources>
