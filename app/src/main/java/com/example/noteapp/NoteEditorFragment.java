@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 public class NoteEditorFragment extends Fragment {
 
-    private static final String ARG_NOTE = "note";
+    public static final String ARG_NOTE = "note";
     private Note note;
 
     public static NoteEditorFragment newInstance(Note note) {
@@ -34,7 +34,8 @@ public class NoteEditorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_editor, container, false);
         EditText editor = view.findViewById(R.id.note_editor);
-        editor.setText(note.getNoteDescription() + "\n" + note.getNoteDate());
+        String str = note.getNoteDescription() + "\n" + note.getNoteDate();
+        editor.setText(str);
         return view;
     }
 }
