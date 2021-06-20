@@ -1,10 +1,13 @@
 package com.example.noteapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +15,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotesListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class NotesListFragment extends Fragment {
+
+    private Note currentNote;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +44,27 @@ public class NotesListFragment extends Fragment {
             linearLayout.addView(noteNameView);
 
             final int index = i;
-            noteNameView.setOnClickListener(v -> {
-                currentNote = new Note(index,
-                        getResources().getStringArray(R.array.notesName)[index],
-                        getResources().getStringArray(R.array.notesDescription)[index],
-                        getResources().getStringArray(R.array.notesDate)[index]);
-            });
+            clickedView(index, noteNameView);
+
         }
+    }
+
+    private void clickedView(int index, TextView textView) {
+        textView.setOnClickListener(v -> {
+            currentNote = new Note(index,
+                    getResources().getStringArray(R.array.notesName)[index],
+                    getResources().getStringArray(R.array.notesDescription)[index],
+                    getResources().getStringArray(R.array.notesDate)[index]);
+            showCurrentNote(currentNote);
+        });
+    }
+
+    private void showCurrentNote(Note currentNote) {
+        NoteEditorFragment editorFragment = NoteEditorFragment.newInstance(currentNote);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.notes_list, editorFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
