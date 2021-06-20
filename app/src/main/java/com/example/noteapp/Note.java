@@ -8,14 +8,17 @@ public class Note implements Parcelable {
     private String noteName;
     private String noteDate;
     private String noteDescription;
+    private int posIndex;
 
-    public Note (String noteName, String noteDescription, String noteDate){
+    public Note (int posIndex, String noteName, String noteDescription, String noteDate){
+        this.posIndex = posIndex;
         this.noteName = noteName;
         this.noteDescription = noteDescription;
         this.noteDate = noteDate;
     }
 
     protected Note(Parcel in) {
+        posIndex = in.readInt();
         noteName = in.readString();
         noteDescription = in.readString();
         noteDate = in.readString();
@@ -30,6 +33,10 @@ public class Note implements Parcelable {
             return new Note[size];
         }
     };
+
+    public int getPosIndex() {
+        return posIndex;
+    }
 
     public String getNoteName() {
         return noteName;
@@ -50,8 +57,10 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(getPosIndex());
         dest.writeString(getNoteName());
         dest.writeString(getNoteDescription());
         dest.writeString(getNoteDate());
     }
+
 }

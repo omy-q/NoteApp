@@ -27,7 +27,7 @@ public class NotesListFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable  Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initNotesList(view);
     }
@@ -35,12 +35,20 @@ public class NotesListFragment extends Fragment {
     private void initNotesList(View view) {
         LinearLayout linearLayout = (LinearLayout) view;
         String[] notesName = getResources().getStringArray(R.array.notesName);
-        for(int i = 0; i < notesName.length; i++){
+        for (int i = 0; i < notesName.length; i++) {
             String noteName = notesName[i];
             TextView noteNameView = new TextView(getContext());
             noteNameView.setText(noteName);
             noteNameView.setTextSize(getResources().getDimension(R.dimen.noteNameSize));
             linearLayout.addView(noteNameView);
+
+            final int index = i;
+            noteNameView.setOnClickListener(v -> {
+                currentNote = new Note(index,
+                        getResources().getStringArray(R.array.notesName)[index],
+                        getResources().getStringArray(R.array.notesDescription)[index],
+                        getResources().getStringArray(R.array.notesDate)[index]);
+            });
         }
     }
 }
