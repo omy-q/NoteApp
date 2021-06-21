@@ -19,7 +19,7 @@
         android:id="@+id/search"
         app:showAsAction="always"
         android:orderInCategory="1"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_search"
         app:actionViewClass="android.widget.SearchView"/>
 
     <item
@@ -27,6 +27,6 @@
         android:id="@+id/add_note"
         app:showAsAction="always"
         android:orderInCategory="2"
-        android:icon="@android:drawable/ic_menu_add" />
+        android:icon="@drawable/ic_add" />
 
 </menu>
