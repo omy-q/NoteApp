@@ -17,10 +17,10 @@
         android:icon="@drawable/ic_text_format"/>
 
     <item
-        android:title="@string/delete"
-        android:id="@+id/search"
+        android:title="@string/gallery"
+        android:id="@+id/gallery"
         app:showAsAction="always"
         android:orderInCategory="3"
-        android:icon="@drawable/ic_delete" />
+        android:icon="@drawable/ic_gallery" />
 
 </menu>
