@@ -10,6 +10,9 @@
     <string name="gallery">gallery</string>
     <string name="favorite">favorite</string>
     <string name="share">share</string>
+    <string name="all_notes">All notes: </string>
+    <string name="favorite_list">Favorite: </string>
+    <string name="title_nav_bar">Notes</string>
 
     <string-array name="notesName">
         <item>Note1</item>

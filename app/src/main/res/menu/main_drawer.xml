@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/all_notes_drawer"
+        android:icon="@drawable/ic_all_list"
+        android:orderInCategory="1"
+        android:title="@string/all_notes" />
+    <item
+        android:id="@+id/favorite_list_drawer"
+        android:icon="@drawable/ic_favorite"
+        android:orderInCategory="2"
+        android:title="@string/favorite_list" />
+    <item
+        android:id="@+id/add_drawer"
+        android:icon="@drawable/ic_add"
+        android:orderInCategory="20"
+        android:title="@string/add_note" />
+    <item
+        android:id="@+id/settings_drawer"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="30"
+        android:title="@string/settings" />
+</menu>
