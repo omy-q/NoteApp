@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">NoteApp</string>
+
+    <string-array name="notesName">
+        <item>Note1</item>
+        <item>Note2</item>
+        <item>Note3</item>
+        <item>Note4</item>
+        <item>Note5</item>
+        <item>Note6</item>
+    </string-array>
+
+    <string-array name="notesDescription">
+        <item>Note1: some text</item>
+        <item>Note2: some text</item>
+        <item>Note3: some text</item>
+        <item>Note4: some text</item>
+        <item>Note5: some text</item>
+        <item>Note6: some text</item>
+    </string-array>
+
+    <string-array name="notesDate">
+        <item>01.01.2021</item>
+        <item>02.02.2021</item>
+        <item>03.03.2021</item>
+        <item>04.04.2021</item>
+        <item>05.05.2021</item>
+        <item>06.06.2021</item>
+    </string-array>
+
 </resources>
