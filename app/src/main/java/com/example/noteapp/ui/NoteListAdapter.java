@@ -15,6 +15,7 @@ import com.example.noteapp.R;
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHolder> {
 
     private String[] noteList;
+    private OnItemClickListener itemClickListener;
 
     public NoteListAdapter(String[] noteList) {
         this.noteList = noteList;
@@ -43,11 +44,26 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.item_of_list);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null) {
+                        itemClickListener.onItemClick(v, getAdapterPosition());
+                    }
+                }
+            });
         }
-
         public TextView getTextView() {
             return textView;
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+        this.itemClickListener = itemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view , int position);
     }
 }
 
