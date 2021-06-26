@@ -67,12 +67,13 @@ public class MainFragment extends Fragment{
     private void initNotesList(View view) {
         LinearLayout linearLayout = (LinearLayout) view;
         String[] notesName = getResources().getStringArray(R.array.notesName);
+        LayoutInflater ltInflater = getLayoutInflater();
         for (int i = 0; i < notesName.length; i++) {
             String noteName = notesName[i];
-            TextView noteNameView = new TextView(getContext());
+            View item = ltInflater.inflate(R.layout.item_notes_list, linearLayout, false);
+            TextView noteNameView = item.findViewById(R.id.item_of_list);
             noteNameView.setText(noteName);
-            noteNameView.setTextSize(getResources().getDimension(R.dimen.noteNameSize));
-            linearLayout.addView(noteNameView);
+            linearLayout.addView(item);
 
             final int index = i;
             clickedView(index, noteNameView);
@@ -111,7 +112,7 @@ public class MainFragment extends Fragment{
         EditorFragment editorFragment = EditorFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container, editorFragment);
+        fragmentTransaction.replace(R.id.main_fragment_container, editorFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
