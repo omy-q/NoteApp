@@ -70,29 +70,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment mainFragment = MainFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragmentToRemove = getVisibleFragment(fragmentManager);
-        if (fragmentToRemove != null) {
-            fragmentTransaction.remove(fragmentToRemove);
-        }
-//        if (isLandscape) {
-//            fragmentTransaction.add(R.id.main_fragment_container, mainFragment);
-//        } else {
-            fragmentTransaction.replace(R.id.main_fragment_container, mainFragment);
-//        }
-
+        fragmentTransaction.replace(R.id.main_fragment_container, mainFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
-
-    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
-        List<Fragment> fragments = fragmentManager.getFragments();
-        for (Fragment fragment : fragments) {
-            if (fragment.isVisible())
-                return fragment;
-        }
-        return null;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
