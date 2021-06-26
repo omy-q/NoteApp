@@ -1,7 +1,5 @@
 package com.example.noteapp;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -12,52 +10,52 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class NotesListFragment extends Fragment {
+
+public class MainFragment extends Fragment{
 
     private Note currentNote;
     private boolean isLandscape;
+
     private static final String CURRENT_NOTE = "note";
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    public static MainFragment newInstance() {
+        return new MainFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         return inflater.inflate(R.layout.fragment_notes_list, container, false);
-    }
-
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
-        } else{
-            currentNote = new Note(0, getResources().getStringArray(R.array.notesName)[0],
-                    getResources().getStringArray(R.array.notesDescription)[0],
-                    getResources().getStringArray(R.array.notesDate)[0]);
-        }
-        if (isLandscape){
-            showLandView();
-        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initNotesList(view);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
+        } else {
+            currentNote = new Note(0, getResources().getStringArray(R.array.notesName)[0],
+                    getResources().getStringArray(R.array.notesDescription)[0],
+                    getResources().getStringArray(R.array.notesDate)[0]);
+        }
+        if (isLandscape) {
+            showLandView();
+        }
     }
 
     @Override
@@ -78,7 +76,6 @@ public class NotesListFragment extends Fragment {
 
             final int index = i;
             clickedView(index, noteNameView);
-
         }
     }
 
@@ -93,24 +90,41 @@ public class NotesListFragment extends Fragment {
     }
 
     private void showCurrentNote() {
-        if (!isLandscape){ showPortView(); }
-        else{ showLandView(); }
+
+        if (isLandscape) {
+            showLandView();
+        } else {
+            showPortView();
+        }
     }
 
     private void showLandView() {
-        NoteEditorFragment editorFragment = NoteEditorFragment.newInstance(currentNote);
+        EditorFragment editorFragment = EditorFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.note_editor_right_fragment, editorFragment);
+        fragmentTransaction.replace(R.id.fragment_container, editorFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
 
     private void showPortView() {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), NoteEditorActivity.class);
-        intent.putExtra(NoteEditorFragment.ARG_NOTE, currentNote);
-        startActivity(intent);
+        EditorFragment editorFragment = EditorFragment.newInstance();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.main_fragment_container, editorFragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
+
+    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment.isVisible())
+                return fragment;
+        }
+        return null;
+    }
+
 
 }
