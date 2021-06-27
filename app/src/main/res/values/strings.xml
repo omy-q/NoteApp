@@ -16,6 +16,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="item">Note_default</string>
+    <string name="item_date">date_default</string>
 
     <string-array name="notesName">
         <item>Note1</item>
