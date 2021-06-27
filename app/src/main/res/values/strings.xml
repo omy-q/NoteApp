@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">NoteApp</string>
+    <string name="settings">settings</string>
+    <string name="search">search</string>
+    <string name="help">help</string>
+    <string name="add_note">add</string>
+    <string name="list">list</string>
+    <string name="format">format</string>
+    <string name="delete">delete</string>
+    <string name="gallery">gallery</string>
+    <string name="favorite">favorite</string>
+    <string name="share">share</string>
+    <string name="all_notes">All notes: </string>
+    <string name="favorite_list">Favorite: </string>
+    <string name="title_nav_bar">Notes</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string-array name="notesName">
         <item>Note1</item>
