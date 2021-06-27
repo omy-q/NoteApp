@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noteapp.data.Note;
+import com.example.noteapp.data.NoteSource;
+import com.example.noteapp.data.NoteSourceImpl;
 import com.example.noteapp.ui.NoteListAdapter;
 
 import java.util.List;
@@ -41,12 +43,12 @@ public class MainFragment extends Fragment {
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
-        String[] data = getResources().getStringArray(R.array.notesName);
+        NoteSource data = new NoteSourceImpl(getResources()).init();
         initRecyclerView(recyclerView, data);
         return view;
     }
 
-    private void initRecyclerView(RecyclerView recyclerView, String[] data) {
+    private void initRecyclerView(RecyclerView recyclerView, NoteSource data) {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -56,9 +58,8 @@ public class MainFragment extends Fragment {
         adapter.setOnItemClickListener(new NoteListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(),
-                        String.format("%s - %d", ((TextView) view).getText(), position),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), String.format("Позиция - %d",position), Toast.LENGTH_SHORT).show();
+
             }
         });
     }
