@@ -2,7 +2,6 @@ package com.example.noteapp.data;
 
 import android.content.res.Resources;
 
-import com.example.noteapp.Note;
 import com.example.noteapp.R;
 
 import java.util.ArrayList;
