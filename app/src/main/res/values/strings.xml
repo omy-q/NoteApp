@@ -15,6 +15,8 @@
     <string name="title_nav_bar">Notes</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="item">Note_default</string>
+    <string name="item_date">date_default</string>
 
     <string-array name="notesName">
         <item>Note1</item>
@@ -23,6 +25,10 @@
         <item>Note4</item>
         <item>Note5</item>
         <item>Note6</item>
+        <item>Note7</item>
+        <item>Note8</item>
+        <item>Note9</item>
+        <item>Note10</item>
     </string-array>
 
     <string-array name="notesDescription">
@@ -32,6 +38,10 @@
         <item>Note4: some text</item>
         <item>Note5: some text</item>
         <item>Note6: some text</item>
+        <item>Note7: some text</item>
+        <item>Note8: some text</item>
+        <item>Note9: some text</item>
+        <item>Note10: some text</item>
     </string-array>
 
     <string-array name="notesDate">
@@ -41,6 +51,10 @@
         <item>04.04.2021</item>
         <item>05.05.2021</item>
         <item>06.06.2021</item>
+        <item>07.07.2021</item>
+        <item>08.08.2021</item>
+        <item>09.09.2021</item>
+        <item>10.10.2021</item>
     </string-array>
 
 </resources>

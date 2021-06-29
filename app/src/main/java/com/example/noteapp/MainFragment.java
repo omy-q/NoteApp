@@ -8,18 +8,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.noteapp.data.Note;
+import com.example.noteapp.data.NoteSource;
+import com.example.noteapp.data.NoteSourceImpl;
+import com.example.noteapp.ui.NoteListAdapter;
+
 import java.util.List;
 
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
 
     private Note currentNote;
     private boolean isLandscape;
@@ -34,13 +41,33 @@ public class MainFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        return inflater.inflate(R.layout.fragment_notes_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
+        NoteSource data = new NoteSourceImpl(getResources()).init();
+        initRecyclerView(recyclerView, data);
+        return view;
+    }
+
+    private void initRecyclerView(RecyclerView recyclerView, NoteSource data) {
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        recyclerView.setLayoutManager(layoutManager);
+        NoteListAdapter adapter = new NoteListAdapter(data);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new NoteListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getContext(), String.format("Позиция - %d",position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initNotesList(view);
+//        initNotesList(view);
     }
 
     @Override
@@ -65,14 +92,15 @@ public class MainFragment extends Fragment{
     }
 
     private void initNotesList(View view) {
-        LinearLayout linearLayout = (LinearLayout) view;
+        FrameLayout frameLayout = (FrameLayout) view;
         String[] notesName = getResources().getStringArray(R.array.notesName);
+        LayoutInflater ltInflater = getLayoutInflater();
         for (int i = 0; i < notesName.length; i++) {
             String noteName = notesName[i];
-            TextView noteNameView = new TextView(getContext());
+            View item = ltInflater.inflate(R.layout.item_notes_list, frameLayout, false);
+            TextView noteNameView = item.findViewById(R.id.item_of_list);
             noteNameView.setText(noteName);
-            noteNameView.setTextSize(getResources().getDimension(R.dimen.noteNameSize));
-            linearLayout.addView(noteNameView);
+            frameLayout.addView(item);
 
             final int index = i;
             clickedView(index, noteNameView);
@@ -111,7 +139,7 @@ public class MainFragment extends Fragment{
         EditorFragment editorFragment = EditorFragment.newInstance();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container, editorFragment);
+        fragmentTransaction.replace(R.id.main_fragment_container, editorFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
