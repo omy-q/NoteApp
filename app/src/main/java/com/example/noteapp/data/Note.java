@@ -9,12 +9,15 @@ public class Note implements Parcelable {
     private String noteDate;
     private String noteDescription;
     private int posIndex;
+    private boolean isFavorite;
 
-    public Note (int posIndex, String noteName, String noteDescription, String noteDate){
+    public Note (int posIndex, String noteName, String noteDescription, String noteDate, boolean isFavorite){
         this.posIndex = posIndex;
         this.noteName = noteName;
         this.noteDescription = noteDescription;
         this.noteDate = noteDate;
+        this.isFavorite = isFavorite;
+
     }
 
     protected Note(Parcel in) {
@@ -48,6 +51,14 @@ public class Note implements Parcelable {
 
     public String getNoteDate() {
         return noteDate;
+    }
+
+    public boolean getNoteFavorite() {
+        return isFavorite;
+    }
+
+    public void setNoteFavorite(boolean isFavorite){
+        this.isFavorite = isFavorite;
     }
 
     @Override

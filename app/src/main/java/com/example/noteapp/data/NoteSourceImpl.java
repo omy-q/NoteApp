@@ -21,7 +21,7 @@ public class NoteSourceImpl implements NoteSource {
         String[] descriptions = resources.getStringArray(R.array.notesDescription);
         String[] dates = resources.getStringArray(R.array.notesDate);
         for (int i = 0; i < names.length; i++) {
-            dataSource.add(new Note(i, names[i], descriptions[i], dates[i]));
+            dataSource.add(new Note(i, names[i], descriptions[i], dates[i], false));
         }
         return this;
     }
@@ -34,6 +34,21 @@ public class NoteSourceImpl implements NoteSource {
     @Override
     public int size() {
         return dataSource.size();
+    }
+
+    @Override
+    public void deleteNote(int position) {
+        dataSource.remove(position);
+    }
+
+    @Override
+    public void updateNote(int position, Note note) {
+        dataSource.set(position, note);
+    }
+
+    @Override
+    public void addNote(Note note) {
+        dataSource.add(note);
     }
 }
 

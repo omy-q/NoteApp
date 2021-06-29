@@ -5,27 +5,35 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.noteapp.data.Note;
 
 public class EditorFragment extends Fragment {
 
     private Note note;
+    public static final String ARG_NOTE = "note";
 
-    public static EditorFragment newInstance() {
-        return new EditorFragment();
+    public static EditorFragment newInstance(Note note) {
+        EditorFragment editorFragment = new EditorFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_NOTE, note);
+        editorFragment.setArguments(args);
+        return editorFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        note = getArguments().getParcelable(ARG_NOTE);
     }
 
     @Override
@@ -51,5 +59,23 @@ public class EditorFragment extends Fragment {
             inflater.inflate(R.menu.main_menu, menu);
         }
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id) {
+//            case R.id.favorite:
+//                showMessage("favorite");
+//                note.setNoteFavorite(true);
+//                data.updateNote(note.getPosIndex(), note);
+//                Log.i("Favorite", String.valueOf(data.getNote(note.getPosIndex()).getNoteFavorite()));
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    private void showMessage(String msg) {
+//        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+//    }
 
 }
