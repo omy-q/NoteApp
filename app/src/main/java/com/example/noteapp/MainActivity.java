@@ -82,45 +82,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        super.onCreateOptionsMenu(menu);
-//        menu.clear();
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return onSearchItemSelected(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (navigateFragment(id)) {
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
     private void showMessage(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
-
-//    private boolean onSearchItemSelected(Menu menu) {
-//        MenuItem search = menu.findItem(R.id.search);
-//        SearchView searchText = (SearchView) search.getActionView();
-//        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                showMessage(query);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                showMessage(newText);
-//                return true;
-//            }
-//        });
-//        return true;
-//    }
 
     private boolean navigateFragment(int id) {
         switch (id) {

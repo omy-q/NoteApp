@@ -60,22 +60,4 @@ public class EditorFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        switch (id) {
-//            case R.id.favorite:
-//                showMessage("favorite");
-//                note.setNoteFavorite(true);
-//                data.updateNote(note.getPosIndex(), note);
-//                Log.i("Favorite", String.valueOf(data.getNote(note.getPosIndex()).getNoteFavorite()));
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    private void showMessage(String msg) {
-//        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-//    }
-
 }
