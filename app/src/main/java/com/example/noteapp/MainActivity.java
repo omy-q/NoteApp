@@ -1,5 +1,6 @@
 package com.example.noteapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,18 +12,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.SearchView;
+import android.os.PersistableBundle;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
+    private static final String FRAGMENT_TRANSFER = "DATA_TRANSFER";
     private boolean isLandscape;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         initView();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     private void initView() {
@@ -67,61 +71,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initMainFragment() {
-        Fragment mainFragment = MainFragment.newInstance();
+        fragment = getSupportFragmentManager().findFragmentByTag("TAG");
+        if (fragment == null) {
+            fragment = MainFragment.newInstance();
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, mainFragment);
+        fragmentTransaction.replace(R.id.main_fragment_container, fragment, "TAG");
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.clear();
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return onSearchItemSelected(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (navigateFragment(id)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void showMessage(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 
-    private boolean onSearchItemSelected(Menu menu) {
-        MenuItem search = menu.findItem(R.id.search);
-        SearchView searchText = (SearchView) search.getActionView();
-        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                showMessage(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                showMessage(newText);
-                return true;
-            }
-        });
-        return true;
-    }
-
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.settings:
                 showMessage("settings");
-                return true;
-            case R.id.add_note:
-                showMessage("replace Fragment - add note");
                 return true;
             case R.id.help:
                 showMessage("help");
@@ -131,24 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.favorite_list:
                 showMessage("replace to Fragment with favorite notes");
-                return true;
-            case R.id.share_note:
-                showMessage("share note");
-                return true;
-            case R.id.favorite:
-                showMessage("favorite");
-                return true;
-            case R.id.delete:
-                showMessage("delete");
-                return true;
-            case R.id.set_list:
-                showMessage("set_list");
-                return true;
-            case R.id.set_format:
-                showMessage("set_format");
-                return true;
-            case R.id.gallery:
-                showMessage("gallery");
                 return true;
         }
         return false;

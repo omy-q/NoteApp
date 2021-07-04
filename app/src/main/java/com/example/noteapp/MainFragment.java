@@ -7,14 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,29 +43,108 @@ public class MainFragment extends Fragment {
         return new MainFragment();
     }
 
+    private NoteSource data;
+    private NoteListAdapter adapter;
+    private RecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
-        NoteSource data = new NoteSourceImpl(getResources()).init();
-        initRecyclerView(recyclerView, data);
+        initView(view);
         return view;
     }
 
-    private void initRecyclerView(RecyclerView recyclerView, NoteSource data) {
+    private void initView(View view) {
+        recyclerView = view.findViewById(R.id.recycler_view_lines);
+        data = new NoteSourceImpl(getResources()).init();
+        initRecyclerView();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.main_menu, menu);
+        onSearchItemSelected(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (isMainMenuItem(id)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isMainMenuItem(int id) {
+        switch (id) {
+            case R.id.settings:
+                showMessage("settings");
+                return true;
+            case R.id.add_note:
+                showMessage("replace Fragment - add note");
+                data.addNote(new Note(data.size(), "Note" + (data.size() + 1), "", "", false));
+                adapter.notifyItemInserted(data.size() - 1);
+                recyclerView.scrollToPosition(data.size() - 1);
+                return true;
+            case R.id.help:
+                showMessage("help");
+                return true;
+            case R.id.favorite:
+                showMessage("favorite");
+                currentNote.setNoteFavorite(true);
+                data.updateNote(currentNote.getPosIndex(), currentNote);
+                return true;
+            case R.id.delete:
+                showMessage("delete");
+                data.deleteNote(currentNote.getPosIndex());
+                adapter.notifyItemRemoved(currentNote.getPosIndex());
+                return true;
+            case R.id.share_note:
+                showMessage("share");
+                return true;
+        }
+        return false;
+    }
+
+    private void showMessage(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    private boolean onSearchItemSelected(Menu menu) {
+        MenuItem search = menu.findItem(R.id.search);
+        SearchView searchText = (SearchView) search.getActionView();
+        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                showMessage(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                showMessage(newText);
+                return true;
+            }
+        });
+        return true;
+    }
+
+    private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(layoutManager);
-        NoteListAdapter adapter = new NoteListAdapter(data);
+        adapter = new NoteListAdapter(data);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new NoteListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), String.format("Позиция - %d",position), Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getContext(), String.format("Позиция - %d", position), Toast.LENGTH_SHORT).show();
+                currentNote = data.getNote(position);
+                showCurrentNote();
             }
         });
     }
@@ -76,9 +161,7 @@ public class MainFragment extends Fragment {
         if (savedInstanceState != null) {
             currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
         } else {
-            currentNote = new Note(0, getResources().getStringArray(R.array.notesName)[0],
-                    getResources().getStringArray(R.array.notesDescription)[0],
-                    getResources().getStringArray(R.array.notesDate)[0]);
+            currentNote = data.getNote(0);
         }
         if (isLandscape) {
             showLandView();
@@ -91,32 +174,6 @@ public class MainFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void initNotesList(View view) {
-        FrameLayout frameLayout = (FrameLayout) view;
-        String[] notesName = getResources().getStringArray(R.array.notesName);
-        LayoutInflater ltInflater = getLayoutInflater();
-        for (int i = 0; i < notesName.length; i++) {
-            String noteName = notesName[i];
-            View item = ltInflater.inflate(R.layout.item_notes_list, frameLayout, false);
-            TextView noteNameView = item.findViewById(R.id.item_of_list);
-            noteNameView.setText(noteName);
-            frameLayout.addView(item);
-
-            final int index = i;
-            clickedView(index, noteNameView);
-        }
-    }
-
-    private void clickedView(int index, TextView textView) {
-        textView.setOnClickListener(v -> {
-            currentNote = new Note(index,
-                    getResources().getStringArray(R.array.notesName)[index],
-                    getResources().getStringArray(R.array.notesDescription)[index],
-                    getResources().getStringArray(R.array.notesDate)[index]);
-            showCurrentNote();
-        });
-    }
-
     private void showCurrentNote() {
 
         if (isLandscape) {
@@ -127,7 +184,7 @@ public class MainFragment extends Fragment {
     }
 
     private void showLandView() {
-        EditorFragment editorFragment = EditorFragment.newInstance();
+        EditorFragment editorFragment = EditorFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, editorFragment);
@@ -136,10 +193,10 @@ public class MainFragment extends Fragment {
     }
 
     private void showPortView() {
-        EditorFragment editorFragment = EditorFragment.newInstance();
+        EditorFragment editorFragment = EditorFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, editorFragment);
+        fragmentTransaction.add(R.id.main_fragment_container, editorFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
