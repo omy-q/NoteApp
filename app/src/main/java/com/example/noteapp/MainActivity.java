@@ -27,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState != null) {
-            fragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_TRANSFER);
-        }
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         initView();
     }
@@ -37,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        getSupportFragmentManager().putFragment(outState, FRAGMENT_TRANSFER, fragment);
     }
 
     private void initView() {
@@ -75,12 +71,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initMainFragment() {
+        fragment = getSupportFragmentManager().findFragmentByTag("TAG");
         if (fragment == null) {
             fragment = MainFragment.newInstance();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, fragment);
+        fragmentTransaction.replace(R.id.main_fragment_container, fragment, "TAG");
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
