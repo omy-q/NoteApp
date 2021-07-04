@@ -20,8 +20,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
     private NoteSource dataSource;
     private OnItemClickListener itemClickListener;
 
-    public NoteListAdapter(NoteSource dataSource) {
+//    public NoteListAdapter() {
+//        this.dataSource = dataSource;
+//    }
+
+    public void setDataSource(NoteSource dataSource) {
         this.dataSource = dataSource;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -64,18 +69,19 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
                 }
             });
         }
-        public void setData(Note note){
+
+        public void setData(Note note) {
             noteName.setText(note.getNoteName());
             noteDate.setText(note.getNoteDate());
         }
     }
 
-    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view , int position);
+        void onItemClick(View view, int position);
     }
 }
 
