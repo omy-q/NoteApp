@@ -6,4 +6,7 @@
     <dimen name="item_date_text_size">15sp</dimen>
     <dimen name="date_margin">8dp</dimen>
     <dimen name="height_card_view">70dp</dimen>
+    <dimen name="dialog_title_text_size">20sp</dimen>
+    <dimen name="dialog_text_size_button">20sp</dimen>
+    <dimen name="dialog_space">20dp</dimen>
 </resources>
