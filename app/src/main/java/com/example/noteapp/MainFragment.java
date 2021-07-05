@@ -38,6 +38,7 @@ public class MainFragment extends Fragment {
 
     private Note currentNote;
     private boolean isLandscape;
+    private boolean isDeleteNote = false;
 
     private static final String CURRENT_NOTE = "note";
 
@@ -106,6 +107,8 @@ public class MainFragment extends Fragment {
                 data.updateNote(currentNote.getPosIndex(), currentNote);
                 return true;
             case R.id.delete:
+                DialogFragment dlg = new DialogDeleteNoteFragment();
+                dlg.show(requireActivity().getSupportFragmentManager(), "transactionTag");
                 showMessage("delete");
                 data.deleteNote(currentNote.getPosIndex());
                 adapter.notifyItemRemoved(currentNote.getPosIndex());
@@ -115,6 +118,14 @@ public class MainFragment extends Fragment {
                 return true;
         }
         return false;
+    }
+
+    public void onDialogResult(boolean resultDialog) {
+        isDeleteNote = resultDialog;
+        if (isDeleteNote) {
+            data.deleteNote(currentNote);
+            adapter.notifyItemRemoved(currentPosition);
+        }
     }
 
     private void showMessage(String msg) {
