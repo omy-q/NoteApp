@@ -73,10 +73,10 @@ public class NoteSourceFirebaseImpl implements NoteSource {
     }
 
     @Override
-    public void deleteNote(int position) {
-        String id = notes.get(position).getId();
+    public void deleteNote(Note note) {
+        String id = note.getId();
         collection.document(id).delete();
-        notes.remove(position);
+        notes.remove(note);
     }
 
     @Override

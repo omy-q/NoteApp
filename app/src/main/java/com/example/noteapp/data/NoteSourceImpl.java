@@ -41,8 +41,8 @@ public class NoteSourceImpl implements NoteSource {
     }
 
     @Override
-    public void deleteNote(int position) {
-        dataSource.remove(position);
+    public void deleteNote(Note note) {
+        dataSource.remove(note);
     }
 
     @Override
