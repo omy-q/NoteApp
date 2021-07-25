@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -37,10 +38,11 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     private Note currentNote;
+    private int currentPosition;
     private boolean isLandscape;
+    private boolean isDeleteNote = false;
 
     private static final String CURRENT_NOTE = "note";
-
     public static MainFragment newInstance() {
         return new MainFragment();
     }
@@ -106,15 +108,24 @@ public class MainFragment extends Fragment {
                 data.updateNote(currentNote.getPosIndex(), currentNote);
                 return true;
             case R.id.delete:
+                DialogFragment dlg = new DialogDeleteNoteFragment();
+                dlg.show(requireActivity().getSupportFragmentManager(), "transactionTag");
                 showMessage("delete");
-                data.deleteNote(currentNote.getPosIndex());
-                adapter.notifyItemRemoved(currentNote.getPosIndex());
+
                 return true;
             case R.id.share_note:
                 showMessage("share");
                 return true;
         }
         return false;
+    }
+
+    public void onDialogResult(boolean resultDialog) {
+        isDeleteNote = resultDialog;
+        if (isDeleteNote) {
+            data.deleteNote(currentNote);
+            adapter.notifyItemRemoved(currentPosition);
+        }
     }
 
     private void showMessage(String msg) {
@@ -152,6 +163,7 @@ public class MainFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 Toast.makeText(getContext(), String.format("Позиция - %d", position), Toast.LENGTH_SHORT).show();
                 currentNote = data.getNote(position);
+                currentPosition = position;
                 showCurrentNote();
             }
         });
@@ -183,7 +195,6 @@ public class MainFragment extends Fragment {
     }
 
     private void showCurrentNote() {
-
         if (isLandscape) {
             showLandView();
         } else {

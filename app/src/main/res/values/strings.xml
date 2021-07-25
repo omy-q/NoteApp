@@ -17,6 +17,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="item">Note_default</string>
     <string name="item_date">date_default</string>
+    <string name="dialog_title_text">Are you sure you want to delete the note?</string>
+    <string name="dialog_text_yes_button">Yes</string>
+    <string name="dialog_text_no_button">No</string>
 
     <string-array name="notesName">
         <item>Note1</item>
