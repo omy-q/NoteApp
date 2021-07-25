@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class Note implements Parcelable {
 
+    private String id;
     private String noteName;
     private String noteDate;
     private String noteDescription;
@@ -25,7 +26,16 @@ public class Note implements Parcelable {
         noteName = in.readString();
         noteDescription = in.readString();
         noteDate = in.readString();
+        isFavorite = in.readByte() != 0;
     }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public static final Creator<Note> CREATOR = new Creator<Note>() {
         @Override
         public Note createFromParcel(Parcel in) {
@@ -72,6 +82,7 @@ public class Note implements Parcelable {
         dest.writeString(getNoteName());
         dest.writeString(getNoteDescription());
         dest.writeString(getNoteDate());
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
     }
 
 }

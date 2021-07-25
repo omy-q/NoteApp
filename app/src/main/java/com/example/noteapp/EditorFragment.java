@@ -44,9 +44,11 @@ public class EditorFragment extends Fragment {
         if (note != null) {
             String str = note.getNoteDescription() + "\n" + note.getNoteDate();
             editor.setText(str);
+            editor.setEnabled(true);
         } else {
             String str1 = "sometext";
             editor.setText(str1);
+            editor.setEnabled(false);
         }
         return view;
     }

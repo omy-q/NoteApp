@@ -26,7 +26,9 @@ import android.widget.Toast;
 
 import com.example.noteapp.data.Note;
 import com.example.noteapp.data.NoteSource;
+import com.example.noteapp.data.NoteSourceFirebaseImpl;
 import com.example.noteapp.data.NoteSourceImpl;
+import com.example.noteapp.data.NoteSourceResponse;
 import com.example.noteapp.ui.NoteListAdapter;
 
 import java.util.List;
@@ -58,8 +60,14 @@ public class MainFragment extends Fragment {
 
     private void initView(View view) {
         recyclerView = view.findViewById(R.id.recycler_view_lines);
-        data = new NoteSourceImpl(getResources()).init();
         initRecyclerView();
+        data = new NoteSourceFirebaseImpl().init(new NoteSourceResponse() {
+            @Override
+            public void initialized(NoteSource noteSource) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setDataSource(data);
     }
 
     @Override
@@ -136,7 +144,7 @@ public class MainFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new NoteListAdapter(data);
+        adapter = new NoteListAdapter();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new NoteListAdapter.OnItemClickListener() {
@@ -161,7 +169,7 @@ public class MainFragment extends Fragment {
         if (savedInstanceState != null) {
             currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
         } else {
-            currentNote = data.getNote(0);
+//            currentNote = data.getNote(0);
         }
         if (isLandscape) {
             showLandView();
