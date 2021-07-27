@@ -104,7 +104,7 @@ public class MainFragment extends Fragment {
                 return true;
             case R.id.favorite:
                 showMessage("favorite");
-                currentNote.setNoteFavorite(true);
+                currentNote.setFavorite(true);
                 data.updateNote(currentNote.getPosIndex(), currentNote);
                 return true;
             case R.id.delete:
